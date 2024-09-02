@@ -1,67 +1,76 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-    </head>
-    <body>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
 
-        <h1>Exercice 0</h1>
+<h1>Exercice 0</h1> <!-- Titre -->
 
-        <script type="text/javascript">
+<script type="text/javascript"> // Début JS
 
-        /* Section 1 */   
+/* Section 1 */
 
-        var name = "Joe";
-        var city = 'London';
-        var age = 32;
-        var isRed = true;
-        var isOld = age > 80;
+// Définition des variables
+var name = "Joe";
+var city = 'London';
+var age = 32;
+var isRed = true;
+var isOld = age > 80;
 
-        var previousJobs = ['lawyer', 'developper', 'Professionnal climber'];
+var previousJobs = ['lawyer', 'developper', 'Professionnal climber'];
 
-        function info(height, weight) {
-            if (height > 180) {
-                console.log('Vous êtes grand');
-            }
-            if (weight < 0) {
-                console.log('oups, there is a problem');
-            } else if ( weight < 15) {
-                console.log('Are you that slim ?')
-            } else {
-                console.log('Good !')
-            }
-        }
+// Déclaration fonction
+function info(height, weight /* paramètres */) {
+    if (height > 180) /* condition */ {
+        console.log('Vous êtes grand'); /* Afficher "vous êtes grands dans la console */
+    }
+    if (weight < 0) {
+        console.log('oups, there is a problem');
+    } else if (weight < 15) {
+        console.log('Are you that slim ?')
+    } else {
+        console.log('Good !')
+    }
+}
 
-        info(165, 45);
+info(165, 45); /* appel de la fonction et déclaration des paramètres */
 
-        var myHeight = 175;
-        var myWeight = 86;
+// Nouvelles variables
+var myHeight = 175;
+var myWeight = 86;
 
-        info(myHeight, myWeight);
+// appel à la fonction info avec les variables définie au dessus comme paramètres
+info(myHeight, myWeight);
 
-        info(myHeight + 15, myWeight - 100);
+// appel à la fonction avec les variables définie +/- un int
+info(myHeight + 15, myWeight - 100);
 
-        function toUpper(variable) {
-            return variable.toUpperCase();
-        }
+// déclaration nouvelle fonction
+function toUpper(variable) {
+    return variable.toUpperCase();
+}
 
-        var upperName = toUpper(name);
+// déclaration variable qui appelle une fonction et prends en paramètre le name définie plus haut
+var upperName = toUpper(name);
 
-        for (i = 0; i < 3; i = i + 1) {
-            console.log(previousJobs[i]);
-        }
+// boucle de 0 à i = 3 => 0/1/2/3, i prends +1 à chaque tour de boucle. La boucle parcours le tableau et affiche le job 0 puis 1 puis 2 puis 3
+for (i = 0; i < 3; i = i + 1) {
+    console.log(previousJobs[i]);
+}
 
-        /* Section 2: */
+/* Section 2: */
 
-        // afficher la ville dans laquele Joe vit.     
+// afficher la ville dans laquele Joe vit.
 
-        // afficher si Joe est roux ou pas.
+// afficher si Joe est roux ou pas.
 
-        /* Section 3 */
+/* Section 3 */
 
-        // console.log(myVariable);
+// console.log(myVariable);
 
-        </script>
+</script>  <!--fin JS-->
 
-    </body>
-</html>
+
+</body> <!--fin body-->
+</html> <!--fin HTML-->
