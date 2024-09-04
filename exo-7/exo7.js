@@ -14,49 +14,39 @@ let tradType = {
 }
 
 // boucle pour ajouter le type traduit à chaque produit dans jsonDatas
-for (let i = 0; i < jsonDatas.length; i++) {
-    jsonDatas[i]["type traduit"] = tradType[jsonDatas[i]['type']];
-    console.log(jsonDatas[i]);
-}
+// for (let item of jsonDatas["type"]) {
+//     item["type traduit"] = tradType[item["type"]];
+// }
 
-// Affichage articles
-// aller chercher la div où je veux inserer le js
-
-
+//creation card pour produit
 function createCard(objet) {
-    let card = '<h2>' + objet['name'] + '</h2>' +
+    return '<h2>' + objet['name'] + '</h2>' +
         '<ul>' +
         '<li> Type: ' + objet['type'] + '</li>' +
         '<li> Description: ' + objet['description'] + '</li>' +
         '<li> Prix: ' + objet['price'] + '</li>' +
         '<li> Quantité disponible: ' + objet['quantity'] + '</li>' +
         '</ul>';
-    return card;
 }
 
+// function affichage
+function display(elements_to_display) {
+    const productDiv = document.getElementById("mes_produits");
+    productDiv.innerHTML = "";
+    for (let product of elements_to_display) {
+        productDiv.innerHTML += createCard(product.items)
+    }
+}
 
-//recherche par categories
-// function cherche() {
-//     const buttonRecherche = document.getElementById("button");
-//     const input = document.getElementById("input");
-//     const productDiv = document.getElementById("mes produits");
-//
-//     buttonRecherche.addEventListener("click", () => {
-//         // Reinitialiser la page
-//         productDiv.innerHTML = "";
-//         const categories = input.value;
-//
-//         //boucle pour afficher les produits de la catégorie renseigner
-//         for (let i = 0; i < jsonDatas.length; i++) {
-//             if (categories === jsonDatas[i]['type']) {
-//                 productDiv.innerHTML += createCard(jsonDatas[i])
-//             }
-//         }
-//     })
-// }
+function updateResults(recherche) {
+    let result = cherche(recherche);
+    if (checkBox.checked) {
+        result = available(result);
+    }
+    display(result);
+}
 
-
-//recherche par categories
+// function recherche et dispo
 function cherche(query) {
     let categorie = [];
     //boucle pour afficher les produits de la catégorie renseigner
@@ -68,47 +58,68 @@ function cherche(query) {
     return categorie
 }
 
-function display(elements_to_display) {
-    const productDiv = document.getElementById("mes_produits");
-    const buttonRecherche = document.getElementById("button");
-    const input = document.getElementById("input");
-    const checkBox = document.getElementById('check');
-
-    productDiv.innerHTML = "";
-
-}
-
-// affichage en fonction de la dispo
-// function available() {
-//     const checkBox = document.getElementById('check');
-//     const rechercheDiv = document.getElementById("recherche");
-//     const productDiv = document.getElementById("mes produits");
-//     // action au clic dans checkbox
-//     rechercheDiv.addEventListener('change', () => {
-//         for (let i = 0; i < jsonDatas.length; i++) {
-//             if (checkBox.checked) {
-//                 if (jsonDatas[i]['quantity'] > 0) {
-//
-//                     productDiv.innerHTML += createCard(jsonDatas[i])
-//                 }
-//             }
-//         }
-//     });
-// }
-
 function available(listeCategorie) {
-    let availableproduct = [];
+    let availableProduct = [];
     for (let i = 0; i < listeCategorie.length; i++) {
         if (listeCategorie[i]['quantity'] > 0) {
-            availableproduct.push(listeCategorie[i]);
+            availableProduct.push(listeCategorie[i]);
         }
     }
-    return availableproduct;
+    return availableProduct;
 }
 
-let liste_filtered = cherche('car');
-liste_filtered = available(liste_filtered);
 
+//affichage
+// au chargement initial de la page
+display(jsonDatas);
 
+// si une recherche est faite
 const input = document.getElementById("input");
-input.a
+input.addEventListener("change", function (event) {
+    let recherche = input.value;
+    updateResults(recherche);
+});
+
+// si checkbox modifié
+const checkBox = document.getElementById('check');
+checkBox.addEventListener("change", function (event) {
+    let recherche = input.value;
+    updateResults(recherche);
+})
+
+//tri par nom
+const name = document.getElementById('name');
+name.addEventListener("click", function (event) {
+    let recherche = input.value;
+    let result = cherche(recherche).sort((a, b) => a.name.localeCompare(b.name));
+    display(result);
+})
+
+// tri par prix croissant
+const priceUp = document.getElementById('priceCroissant');
+priceUp.addEventListener("click", function (event) {
+    let recherche = input.value;
+    let result = cherche(recherche).sort((a, b) => a.price - b.price)
+    display(result);
+})
+
+// tri par prix décroissant
+const priceDown = document.getElementById('priceDecroissant');
+priceDown.addEventListener("click", function (event) {
+    let recherche = input.value;
+    let result = cherche(recherche).sort((a, b) => b.price - a.price)
+    display(result);
+})
+
+//Ajout produit à la liste
+const form = document.getElementById('form');
+form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const name = document.getElementById("formName").value;
+    const type = document.getElementById("formType").value;
+    const description = document.getElementById("formDescription").value;
+    const price = parseInt(document.getElementById("formPrice").value);
+    const quantity = parseInt(document.getElementById("formQuantity").value);
+    jsonDatas.push({"name" : name, "type": type, "description" : description, "price" : price, "quantity" : quantity});
+    display(jsonDatas);
+})

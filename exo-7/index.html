@@ -12,12 +12,30 @@
         <label for="input">Choisir une catégorie:</label>
         <input type="text" id="input" placeholder="categorie">
         <button id="button">Catégorie</button>
-        <label for="check">Afficher uniquement les articles disponible:</label>
+        <label for="check">Afficher uniquement les articles disponibles:</label>
         <input type="checkbox" id="check">
     </div>
-    <div id="mes_produits"></div>
+    <div id="tri">
+        <button id="name">Trier par nom</button>
+        <button id="priceCroissant">Prix croissant</button>
+        <button id="priceDecroissant">Prix décroissant</button>
+    </div>
+    <div id="mes_produits">
+        <!-- Fonction display -->
+    </div>
+    <div id="addProduct">
+        <h2>Ajouter un produit à vendre</h2>
+        <form method="post" id="form">
+            <p><label for="formName"></label>Nom<input type="text" name="name" id="formName"></p>
+            <p><label for="formType"></label>Type<input type="text" name="type" id="formType"></p>
+            <p><label for="formDescription">Description</label><input type="text" name="description" id="formDescription"></p>
+            <p><label for="formPrice"></label>Prix<input type="text" name="price" id="formPrice"></p>
+            <p> <label for="formQuantity"></label>Quantité à vendre<input type="text" name="quantity" id="formQuantity"></p>
+            <p><button type="submit">Ajouter à la liste</button>
+        </form>
+    </div>
 </div>
-<script src="datas.js"></script>
+<script src="datas 2.js"></script>
 <script src="exo7.js"></script>
 </body>
 </html>
