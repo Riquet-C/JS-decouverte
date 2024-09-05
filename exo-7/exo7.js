@@ -24,18 +24,17 @@ for (let categories of jsonDatas) {
 
 //creation card pour produit
 function createCard(objet, type) {
-    let descriptionHtml = '';
-    if (objet['description']) {
-        descriptionHtml = '<li> Description: ' + objet['description'] + '</li>';
-    }
-
-    return '<h2>' + objet['name'] + '</h2>' +
-        '<ul>' +
-        '<li> Type: ' + type + '</li>' +
-        descriptionHtml +
-        '<li> Prix: ' + objet['price'] + '</li>' +
-        '<li> Quantité disponible: ' + objet['quantity'] + '</li>' +
-        '</ul>';
+    return `
+        <div class="card m-2 border-success">
+            <div class="card-body">
+                <h5 class="card-title">${objet.name || 'Nom indisponible'}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">${type || 'Type indisponible'}</h6>
+                <p class="card-text">${objet.description || ''}</p>
+                <p class="card-text">${objet.price || 'Prix non disponible'}</p>
+                <p class="card-text">${objet.quantity || 'Quantité non disponible'}</p>
+            </div>
+        </div>
+    `
 }
 
 // function affichage
@@ -61,6 +60,22 @@ function updateResults(recherche) {
     display(result)
 }
 
+//affichage
+// au chargement initial de la page
+function start(data) {
+    const productDiv = document.getElementById("mes_produits");
+    productDiv.innerHTML = "";
+    for (let categories of data) {
+        let type = categories["type"];
+        let items = categories["items"];
+        for (let item of items) {
+            productDiv.innerHTML += createCard(item, type)
+        }
+    }
+}
+
+start(jsonDatas);
+
 // function recherche et dispo
 function cherche(query) {
     let categorie = [];
@@ -78,7 +93,6 @@ function available(listeCategorie) {
     let availableProduct = [];
     for (let i = 0; i < listeCategorie.length; i++) {
         if (listeCategorie[i]['quantity'] > 0) {
-            console.log(listeCategorie)
             availableProduct.push(listeCategorie[i]);
             availableProduct["type"] = listeCategorie['type'];
         }
@@ -86,59 +100,57 @@ function available(listeCategorie) {
     return availableProduct;
 }
 
-//affichage
-// au chargement initial de la page
-function start(data) {
-    const productDiv = document.getElementById("mes_produits");
-    for (let categories of data) {
-        let type = categories["type"];
-        let items = categories["items"];
-        for (let item of items) {
-            productDiv.innerHTML += createCard(item, type)
-        }
-    }
+
+function categories(data) {
+    const dropDownRecherche = document.getElementById("dropDownRecherche");
+    dropDownRecherche.innerHTML = '';
+    data.forEach(item => {
+        dropDownRecherche.innerHTML += `<li><a class="dropdown-item" data-value="${item.type}">${item.type}</a></li>`;
+    })
+    document.querySelectorAll('#dropDownRecherche .dropdown-item').forEach(item => {
+        item.addEventListener('click', function () {
+            document.querySelectorAll('#dropDownRecherche .dropdown-item').forEach(el => el.classList.remove('active'));
+            this.classList.add('active');
+            let recherche = this.getAttribute('data-value');
+            updateResults(recherche);
+        });
+    });
 }
 
-start(jsonDatas);
 
+categories(jsonDatas);
 
 // si une recherche est faite
-const input = document.getElementById("input");
-input.addEventListener("change", function (event) {
-    let recherche = input.value;
-    updateResults(recherche);
+let recherche = document.getElementById("recherche");
+const checkBox = document.getElementById('check');
+const name = document.getElementById('name');
+const priceUp = document.getElementById('priceCroissant');
+const priceDown = document.getElementById('priceDecroissant');
+
+
+checkBox.addEventListener("change", function () {
+    let recherche = document.querySelector('.active')?.getAttribute("data-value");
+    updateResults(recherche || "");
 });
 
-// si checkbox modifié
-const checkBox = document.getElementById('check');
-checkBox.addEventListener("change", function (event) {
-    let recherche = input.value;
-    updateResults(recherche);
-})
-
-//tri par nom
-const name = document.getElementById('name');
-name.addEventListener("click", function (event) {
-    let recherche = input.value;
-    let result = cherche(recherche).sort((a, b) => a.name.localeCompare(b.name));
+name.addEventListener("click", function () {
+    let recherche = document.querySelector('.active')?.getAttribute("data-value");
+    let result = cherche(recherche || "").sort((a, b) => a.name.localeCompare(b.name));
     display(result);
-})
+});
 
-// tri par prix croissant
-const priceUp = document.getElementById('priceCroissant');
-priceUp.addEventListener("click", function (event) {
-    let recherche = input.value;
-    let result = cherche(recherche).sort((a, b) => a.price - b.price)
+priceUp.addEventListener("click", function () {
+    let recherche = document.querySelector('.active')?.getAttribute("data-value");
+    let result = cherche(recherche || "").sort((a, b) => a.price - b.price);
     display(result);
-})
+});
 
-// tri par prix décroissant
-const priceDown = document.getElementById('priceDecroissant');
-priceDown.addEventListener("click", function (event) {
-    let recherche = input.value;
-    let result = cherche(recherche).sort((a, b) => b.price - a.price)
+priceDown.addEventListener("click", function () {
+    let recherche = document.querySelector('.active')?.getAttribute("data-value");
+    let result = cherche(recherche || "").sort((a, b) => b.price - a.price);
     display(result);
-})
+});
+
 
 //Ajout produit à la liste
 const form = document.getElementById('form');
@@ -159,12 +171,31 @@ form.addEventListener("submit", function (event) {
             "address": "1 Grande Rue 74000 Annecy"
         }
     }
-
+    localStorage.setItem("donnees", JSON.stringify(newProduct));
     //ajout à jsonDatas
     for (let i = 0; i < jsonDatas.length; i++) {
         if (type === jsonDatas[i].type) {
             jsonDatas[i].items.push(newProduct);
+
         }
-        console.log(jsonDatas[i]);
+
+        start(jsonDatas);
     }
 })
+
+function addLocalStorageToJson() {
+    const donnees = localStorage.getItem("donnees");
+    const type = document.getElementById("formType").value;
+    const parsedDonnees = JSON.parse(donnees);
+    for (let i = 0; i < jsonDatas.length; i++) {
+        console.log(type)
+        console.log(jsonDatas[i].items);
+        if (type === jsonDatas[i].type) {
+            jsonDatas[i].items = jsonDatas[i].items.concat(parsedDonnees);
+            console.log(jsonDatas[i].items);
+        }
+    }
+    return jsonDatas;
+}
+
+addLocalStorageToJson()

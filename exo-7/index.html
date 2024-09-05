@@ -3,35 +3,81 @@
 
 <head>
     <meta charset="utf-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <title>Shop</title>
 </head>
 
 <body>
-<div class="container">
-    <h1>Mes Produits</h1>
-    <div id="recherche">
-        <label for="input">Choisir une catégorie:</label>
-        <input type="text" id="input" placeholder="categorie">
-        <button id="button">Catégorie</button>
-        <label for="check">Afficher uniquement les articles disponibles:</label>
-        <input type="checkbox" id="check">
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand">Mes Produits</a>
+        <div class="dropdown ">
+            <button class="btn btn-secondary dropdown-toggle" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                Choix Catégorie
+            </button>
+            <ul class="dropdown-menu" id="dropDownRecherche" aria-labelledby="dropdownMenuButton1">
+
+            </ul>
+        </div>
+<!--        <div class="d-flex">-->
+<!--            <input class="form-control me-2" type="text" id="input" placeholder="categorie">-->
+<!--            <button class="btn btn-outline-success" id="button">Recherche</button>-->
+<!--        </div>-->
     </div>
-    <div id="tri">
-        <button id="name">Trier par nom</button>
-        <button id="priceCroissant">Prix croissant</button>
-        <button id="priceDecroissant">Prix décroissant</button>
+</nav>
+<div class="container-fluid">
+    <!--  Tri et Disponibilité   -->
+    <div class=" d-flex justify-content-end m-2 tri">
+        <div class="align-self-center m-2">
+            <label for="check">Afficher uniquement les articles disponibles:</label>
+            <input type="checkbox" id="check">
+        </div>
+        <div class="dropdown " id="tri">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                Trier
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                <li><a class="dropdown-item" id="name">Trier par nom</a></li>
+                <li><a class="dropdown-item" id="priceCroissant">Prix croissant</a></li>
+                <li><a class="dropdown-item" id="priceDecroissant">Prix décroissant</a></li>
+            </ul>
+        </div>
     </div>
-    <div id="mes_produits">
-        <!-- Fonction display -->
+    <div id="mes_produits" class="justify-content-around row row-cols-2 row-cols-md-4 g-4 m-3">
+            <!-- Fonction display -->
     </div>
     <div id="addProduct">
         <h2>Ajouter un produit à vendre</h2>
         <form method="post" id="form">
-            <p><label for="formName"></label>Nom<input type="text" name="name" id="formName"></p>
-            <p><label for="formType"></label>Type<input type="text" name="type" id="formType"></p>
-            <p><label for="formDescription">Description</label><input type="text" name="description" id="formDescription"></p>
-            <p><label for="formPrice"></label>Prix<input type="text" name="price" id="formPrice"></p>
-            <p> <label for="formQuantity"></label>Quantité à vendre<input type="text" name="quantity" id="formQuantity"></p>
-            <p><button type="submit">Ajouter à la liste</button>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Nom</span>
+                <input type="text" class="form-control" name="name" id="formName" placeholder="Nom de l'article" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Type</span>
+                <input type="text" id="formType" class="form-control" placeholder="Type">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Description</span>
+                <textarea class="form-control" aria-label="With textarea" name="description" id="formDescription"></textarea>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Prix</span>
+                <input type="number" name="price" id="formPrice" class="form-control">
+                <span class="input-group-text">€</span>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Quantité à vendre</span>
+                <input type="number" name="quantity" id="formQuantity" class="form-control">
+                <span class="input-group-text">€</span>
+            </div>
+            <button type="submit" class="btn btn-outline-success mb-3">Ajouter à la liste</button>
         </form>
     </div>
 </div>
